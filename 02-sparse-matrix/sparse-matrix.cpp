@@ -1,3 +1,8 @@
+/*Implement a program for storing a sparse matrix using 2-D Array for following operations:-
+1. Compute transpose of matrix
+2. Compute fast transpose of matrix
+3. Add and multiply two sparse matrices*/
+
 #include <iostream>
 using namespace std;
 
