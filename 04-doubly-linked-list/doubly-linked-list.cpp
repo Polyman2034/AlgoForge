@@ -1,3 +1,5 @@
+/*Design and implement a program for sorting two given lists and merging these two sorted lists of marks
+scored for technical skill examination of recruitment cell using doubly linked list.*/
 #include <iostream>
 using namespace std;
 
