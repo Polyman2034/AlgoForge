@@ -1,3 +1,6 @@
+/*Design and develop program for insertion, updating, searching, sorting, listing and deletion operations
+using singly linked list for any one of the following applications :-
+"Placement Information System"*/
 #include <iostream>
 #include <string>
 using namespace std;
