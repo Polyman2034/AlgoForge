@@ -1,3 +1,6 @@
+/*Design and implement a program to read, display, insert, update and delete operations on data objects
+using array for any one of the following application:-
+"Student Management System"*/
 #include <iostream>
 using namespace std;
 
