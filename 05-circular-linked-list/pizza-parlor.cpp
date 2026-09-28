@@ -4,79 +4,72 @@ once placed cannot be cancelled. Write a program to simulate the system using ci
 #include <iostream>
 using namespace std;
 
-
 // NODE CLASS
 class Node
 {
 public:
     int order;
     Node* next;
+
+    Node(int order)
+    {
+        this->order = order;
+        next = NULL;
+    }
 };
 
 // LIST CLASS
 class List
 {
-    Node *head, *temp;
+    Node* head;
+    Node* tail;
     int count;
     int maxOrders;
 
 public:
 
-    // Constructor
     List(int M)
     {
         head = NULL;
-        temp = NULL;
+        tail = NULL;
         count = 0;
         maxOrders = M;
     }
 
-    // Function Declaration
-    void create(int order);
     void insert(int order);
     void deleteOrder();
     void display();
 };
 
-// CREATE FUNCTION
-void List::create(int order)
-{
-    Node* newnode = new Node;
-
-    newnode->order = order;
-
-    if (head == NULL)
-    {
-        head = newnode;
-        temp = newnode;
-
-        newnode->next = head;
-    }
-    else
-    {
-        temp->next = newnode;
-        temp = newnode;
-
-        temp->next = head;
-    }
-}
-
-// INSERT FUNCTION
+// INSERT ORDER
 void List::insert(int order)
 {
-    if (count >= maxOrders)
+    if (count == maxOrders)
     {
         cout << "Pizza parlor is full!\n";
         return;
     }
 
-    create(order);
+    Node* newNode = new Node(order);
+
+    if (head == NULL)
+    {
+        head = tail = newNode;
+        tail->next = head;
+    }
+    else
+    {
+        newNode->next = head;
+        tail->next = newNode;
+        tail = newNode;
+    }
+
     count++;
 
     cout << "Order " << order << " placed successfully.\n";
 }
 
-// DELETE FUNCTION
+// SERVE ORDER
 void List::deleteOrder()
 {
     if (head == NULL)
@@ -89,22 +82,21 @@ void List::deleteOrder()
 
     cout << "Order " << head->order << " served.\n";
 
-    if (head == temp)
+    if (head == tail)
     {
-        head = NULL;
-        temp = NULL;
+        head = tail = NULL;
     }
     else
     {
         head = head->next;
-        temp->next = head;
+        tail->next = head;
     }
 
     delete del;
     count--;
 }
 
-// DISPLAY FUNCTION
+// DISPLAY ORDERS
 void List::display()
 {
     if (head == NULL)
@@ -133,6 +125,7 @@ int main()
     int M;
     int choice;
     int orderNo = 1;
+    char again;
 
     cout << "Enter maximum number of orders: ";
     cin >> M;
@@ -145,15 +138,13 @@ int main()
         cout << "1. Place Order\n";
         cout << "2. Serve Order\n";
         cout << "3. Display Orders\n";
-        cout << "4. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice)
         {
         case 1:
-            pizza.insert(orderNo);
-            orderNo++;
+            pizza.insert(orderNo++);
             break;
 
         case 2:
@@ -164,15 +155,16 @@ int main()
             pizza.display();
             break;
 
-        case 4:
-            cout << "Program ended.\n";
-            break;
-
         default:
             cout << "Invalid choice!\n";
         }
 
-    } while (choice != 4);
+        cout << "\nDo you want to continue? (y/n): ";
+        cin >> again;
+
+    } while (again == 'y' || again == 'Y');
+
+    cout << "\nProgram ended.\n";
 
     return 0;
 }
