@@ -1,6 +1,4 @@
 /*
-Practical No. 06 - STACK
-
 Given as input a prefix expression.
 Implement a program for following conversions:
 
