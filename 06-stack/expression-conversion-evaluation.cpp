@@ -1,29 +1,71 @@
+/*
+Practical No. 06 - STACK
+
+Given as input a prefix expression.
+Implement a program for following conversions:
+
+a) Prefix to Infix
+b) Infix to Postfix
+c) Postfix Evaluation
+*/
+
 #include <iostream>
 #include <stack>
 #include <string>
 #include <cctype>
 using namespace std;
 
-// Check whether character is an operator
-bool isOperator(char ch) {
+
+// STACK CLASS
+class Stack
+{
+public:
+    stack<string> s;
+
+    void prefixToInfix(string prefix);
+    void infixToPostfix(string infix);
+    void postfixEvaluation(string postfix);
+
+    bool isOperator(char ch);
+    int precedence(char ch);
+};
+
+
+// CHECK OPERATOR
+bool Stack::isOperator(char ch)
+{
     return ch == '+' || ch == '-' || ch == '*' || ch == '/';
 }
 
-// ---------------- PREFIX TO INFIX ----------------
-string prefixToInfix(string prefix) {
 
+// OPERATOR PRECEDENCE
+int Stack::precedence(char ch)
+{
+    if (ch == '+' || ch == '-')
+        return 1;
+
+    if (ch == '*' || ch == '/')
+        return 2;
+
+    return 0;
+}
+
+
+// PREFIX TO INFIX
+void Stack::prefixToInfix(string prefix)
+{
     stack<string> s;
 
-    // Scan from right to left
-    for (int i = prefix.length() - 1; i >= 0; i--) {
-
+    for (int i = prefix.length() - 1; i >= 0; i--)
+    {
         char ch = prefix[i];
 
-        if (isalnum(ch)) {
+        if (isalnum(ch))
+        {
             s.push(string(1, ch));
         }
-        else if (isOperator(ch)) {
-
+        else if (isOperator(ch))
+        {
             string operand1 = s.top();
             s.pop();
 
@@ -36,51 +78,50 @@ string prefixToInfix(string prefix) {
         }
     }
 
-    return s.top();
+    string infix = s.top();
+
+    cout << "Infix Expression: " << infix << endl;
+
+    infixToPostfix(infix);
 }
 
-// ---------------- INFIX TO POSTFIX ----------------
-int precedence(char ch) {
 
-    if (ch == '+' || ch == '-')
-        return 1;
-
-    if (ch == '*' || ch == '/')
-        return 2;
-
-    return 0;
-}
-
-string infixToPostfix(string infix) {
-
+// INFIX TO POSTFIX
+void Stack::infixToPostfix(string infix)
+{
     stack<char> s;
     string postfix = "";
 
-    for (char ch : infix) {
+    for (int i = 0; i < infix.length(); i++)
+    {
+        char ch = infix[i];
 
-        if (isalnum(ch)) {
+        if (isalnum(ch))
+        {
             postfix += ch;
         }
 
-        else if (ch == '(') {
+        else if (ch == '(')
+        {
             s.push(ch);
         }
 
-        else if (ch == ')') {
-
-            while (!s.empty() && s.top() != '(') {
+        else if (ch == ')')
+        {
+            while (!s.empty() && s.top() != '(')
+            {
                 postfix += s.top();
                 s.pop();
             }
 
-            s.pop();   // Remove '('
+            s.pop();
         }
 
-        else if (isOperator(ch)) {
-
+        else if (isOperator(ch))
+        {
             while (!s.empty() &&
-                   precedence(s.top()) >= precedence(ch)) {
-
+                   precedence(s.top()) >= precedence(ch))
+            {
                 postfix += s.top();
                 s.pop();
             }
@@ -89,27 +130,34 @@ string infixToPostfix(string infix) {
         }
     }
 
-    while (!s.empty()) {
+    while (!s.empty())
+    {
         postfix += s.top();
         s.pop();
     }
 
-    return postfix;
+    cout << "Postfix Expression: " << postfix << endl;
+
+    postfixEvaluation(postfix);
 }
 
-// ---------------- POSTFIX EVALUATION ----------------
-int postfixEvaluation(string postfix) {
 
+// POSTFIX EVALUATION
+void Stack::postfixEvaluation(string postfix)
+{
     stack<int> s;
 
-    for (char ch : postfix) {
+    for (int i = 0; i < postfix.length(); i++)
+    {
+        char ch = postfix[i];
 
-        if (isdigit(ch)) {
+        if (isdigit(ch))
+        {
             s.push(ch - '0');
         }
 
-        else if (isOperator(ch)) {
-
+        else if (isOperator(ch))
+        {
             int operand2 = s.top();
             s.pop();
 
@@ -118,47 +166,46 @@ int postfixEvaluation(string postfix) {
 
             int result;
 
-            if (ch == '+')
+            switch (ch)
+            {
+            case '+':
                 result = operand1 + operand2;
+                break;
 
-            else if (ch == '-')
+            case '-':
                 result = operand1 - operand2;
+                break;
 
-            else if (ch == '*')
+            case '*':
                 result = operand1 * operand2;
+                break;
 
-            else
+            case '/':
                 result = operand1 / operand2;
+                break;
+            }
 
             s.push(result);
         }
     }
 
-    return s.top();
+    cout << "Result: " << s.top() << endl;
 }
 
-// ---------------- MAIN ----------------
-int main() {
 
+// MAIN FUNCTION
+int main()
+{
     string prefix;
+
+    Stack expression;
 
     cout << "Enter prefix expression: ";
     cin >> prefix;
 
-    // Prefix -> Infix
-    string infix = prefixToInfix(prefix);
+    cout << "\n----- EXPRESSION CONVERSION -----\n";
 
-    cout << "Infix Expression: " << infix << endl;
-
-    // Infix -> Postfix
-    string postfix = infixToPostfix(infix);
-
-    cout << "Postfix Expression: " << postfix << endl;
-
-    // Postfix Evaluation
-    int result = postfixEvaluation(postfix);
-
-    cout << "Result: " << result << endl;
+    expression.prefixToInfix(prefix);
 
     return 0;
 }
