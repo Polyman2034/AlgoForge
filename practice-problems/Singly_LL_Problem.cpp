@@ -78,6 +78,7 @@ void ll::create()
 
 void ll::insertBeginning()
 {
+
     
 }
 
