@@ -78,19 +78,82 @@ void ll::create()
 
 void ll::insertBeginning()
 {
+    if(exist){
+     int marks;
 
-    
+     Node *newNode = new Node;
+
+    cout << "Enter the Marks: ";
+    cin >> marks;
+
+     newNode->data = marks;
+     newNode->next=head;
+     head=newNode;
+    }
+
 }
 
 
 void ll::insertEnd()
 {
-    
+    int marks;
+
+    Node *newNode = new Node;
+
+    cout << "Enter the Marks: ";
+    cin >> marks;
+
+    newNode->data = marks;
+    newNode->next = NULL;
+
+    if(head == NULL)
+    {
+        head = newNode;
+    }
+    else
+    {
+        Node *temp = head;
+
+        while(temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+
+        temp->next = newNode;
+    }
+
+    exist = true;
+    n++;
 }
 
 
 void ll::insertPosition()
 {
+    int marks;
+    int pn;
+
+    cout << "Enter the Position: ";
+    cin >> pn;
+
+    Node *newNode = new Node;
+
+    cout << "Enter the Marks: ";
+    cin >> marks;
+
+    newNode->data = marks;
+    newNode->next = NULL;
+   
+    Node *temp = head;
+
+for(int pos = 0 ; pos < pn - 1 ; pos++){
+    if(pos != pn)
+        {
+            temp = temp->next;
+        }
+}
+
+    newNode -> next=temp -> next;
+    temp -> next = newNode;
 
     
 }
@@ -203,3 +266,4 @@ int main()
 
     return 0;
 }
+
