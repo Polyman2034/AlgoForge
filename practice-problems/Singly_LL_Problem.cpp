@@ -19,25 +19,18 @@ public:
     ll()
     {
         head = NULL;
+        n = 0;
     }
 
-    // Create Node
     void create();
-
-    // Inserting the Node
     void insertBeginning();
     void insertEnd();
     void insertPosition();
-
-    // Deleting the Node
     void deleteBeginning();
     void deleteEnd();
     void deletePosition();
-
-    // Display the Linked List
     void display();
 };
-
 
 void ll::create()
 {
@@ -72,27 +65,30 @@ void ll::create()
         previous = newNode;
     }
 
-    exist = true;
+    if(n > 0)
+        exist = true;
+    else
+        exist = false;
 }
-
 
 void ll::insertBeginning()
 {
-    if(exist){
-     int marks;
+    int marks;
 
-     Node *newNode = new Node;
+    Node *newNode = new Node;
 
     cout << "Enter the Marks: ";
     cin >> marks;
 
-     newNode->data = marks;
-     newNode->next=head;
-     head=newNode;
-    }
+    newNode->data = marks;
 
+    newNode->next = head;
+
+    head = newNode;
+
+    n++;
+    exist = true;
 }
-
 
 void ll::insertEnd()
 {
@@ -122,18 +118,28 @@ void ll::insertEnd()
         temp->next = newNode;
     }
 
-    exist = true;
     n++;
+    exist = true;
 }
-
 
 void ll::insertPosition()
 {
-    int marks;
-    int pn;
+    int marks, pn;
 
     cout << "Enter the Position: ";
     cin >> pn;
+
+    if(pn == 1)
+    {
+        insertBeginning();
+        return;
+    }
+
+    if(head == NULL || pn < 1 || pn > n + 1)
+    {
+        cout << "Invalid position!" << endl;
+        return;
+    }
 
     Node *newNode = new Node;
 
@@ -141,45 +147,119 @@ void ll::insertPosition()
     cin >> marks;
 
     newNode->data = marks;
-    newNode->next = NULL;
-   
+
     Node *temp = head;
 
-for(int pos = 0 ; pos < pn - 1 ; pos++){
-    if(pos != pn)
-        {
-            temp = temp->next;
-        }
+    for(int pos = 1; pos < pn - 1; pos++)
+    {
+        temp = temp->next;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+
+    n++;
+    exist = true;
 }
-
-    newNode -> next=temp -> next;
-    temp -> next = newNode;
-
-    
-}
-
 
 void ll::deleteBeginning()
 {
-    
-}
+    if(head == NULL)
+    {
+        cout << "Linked List is empty!" << endl;
+        return;
+    }
 
+    Node *temp = head;
+
+    head = head->next;
+
+    delete temp;
+
+    n--;
+
+    if(n == 0)
+        exist = false;
+}
 
 void ll::deleteEnd()
 {
-    
-}
+    if(head == NULL)
+    {
+        cout << "Linked List is empty!" << endl;
+        return;
+    }
 
+    // Only one node
+    if(head->next == NULL)
+    {
+        delete head;
+
+        head = NULL;
+
+        n--;
+        exist = false;
+
+        return;
+    }
+
+    Node *temp = head;
+
+    // Reach second-last node
+    while(temp->next->next != NULL)
+    {
+        temp = temp->next;
+    }
+
+    delete temp->next;
+
+    temp->next = NULL;
+
+    n--;
+}
 
 void ll::deletePosition()
 {
-    
-}
+    int pn;
 
+    cout << "Enter the Position: ";
+    cin >> pn;
+
+    if(head == NULL || pn < 1 || pn > n)
+    {
+        cout << "Invalid position!" << endl;
+        return;
+    }
+
+    if(pn == 1)
+    {
+        deleteBeginning();
+        return;
+    }
+
+    Node *temp = head;
+
+    // Reach node before position
+    for(int pos = 1; pos < pn - 1; pos++)
+    {
+        temp = temp->next;
+    }
+
+    Node *deleteNode = temp->next;
+
+    temp->next = deleteNode->next;
+
+    delete deleteNode;
+
+    n--;
+
+    if(n == 0)
+        exist = false;
+}
 
 void ll::display()
 {
-    if(!exist || head == NULL)
+    if(head == NULL)
     {
         cout << "Linked List is empty!" << endl;
         return;
@@ -192,16 +272,17 @@ void ll::display()
     while(temp != NULL)
     {
         cout << temp->data << " ";
+
         temp = temp->next;
     }
 
     cout << endl;
 }
 
-
 int main()
 {
     ll list;
+
     int choice;
 
     do
@@ -266,4 +347,3 @@ int main()
 
     return 0;
 }
-
