@@ -13,29 +13,30 @@ Additional Practice:
 using namespace std;
 
 
-// ======================================================
-//                    2 x 2 SUDOKU
-// ======================================================
 
-class Sudoku2x2
+//  N x N SUDOKU
+
+
+class SudokuNxN
 {
 private:
 
-    int board[2][2];
+    int N;
+    int **board;
 
 
     // CHECK WHETHER NUMBER IS SAFE
     bool isSafe(int row, int col, int num)
     {
         // Check row
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < N; i++)
         {
             if (board[row][i] == num)
                 return false;
         }
 
         // Check column
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < N; i++)
         {
             if (board[i][col] == num)
                 return false;
@@ -54,9 +55,9 @@ private:
 
 
         // Find empty cell
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < N; i++)
         {
-            for (int j = 0; j < 2; j++)
+            for (int j = 0; j < N; j++)
             {
                 if (board[i][j] == 0)
                 {
@@ -77,11 +78,12 @@ private:
             return true;
 
 
-        // Try numbers 1 to 2
-        for (int num = 1; num <= 2; num++)
+        // Try numbers from 1 to N
+        for (int num = 1; num <= N; num++)
         {
             if (isSafe(row, col, num))
             {
+                // Place number
                 board[row][col] = num;
 
 
@@ -95,6 +97,7 @@ private:
             }
         }
 
+
         return false;
     }
 
@@ -102,21 +105,46 @@ private:
 public:
 
     // CONSTRUCTOR
-    Sudoku2x2()
+    SudokuNxN(int n)
     {
-        int puzzle[2][2] =
+        N = n;
+
+        board = new int*[N];
+
+        for (int i = 0; i < N; i++)
         {
-            {1, 0},
-            {0, 1}
-        };
+            board[i] = new int[N];
+        }
+    }
 
 
-        // Copy puzzle into board
-        for (int i = 0; i < 2; i++)
+    // DESTRUCTOR
+    ~SudokuNxN()
+    {
+        for (int i = 0; i < N; i++)
         {
-            for (int j = 0; j < 2; j++)
+            delete[] board[i];
+        }
+
+        delete[] board;
+    }
+
+
+    // TAKE PUZZLE FROM USER
+    void inputPuzzle()
+    {
+        cout << "\nEnter the "
+             << N << " x " << N
+             << " Sudoku puzzle:\n";
+
+        cout << "Enter 0 for empty cells.\n\n";
+
+
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
             {
-                board[i][j] = puzzle[i][j];
+                cin >> board[i][j];
             }
         }
     }
@@ -125,9 +153,9 @@ public:
     // DISPLAY
     void display()
     {
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < N; i++)
         {
-            for (int j = 0; j < 2; j++)
+            for (int j = 0; j < N; j++)
             {
                 cout << board[i][j] << " ";
             }
@@ -141,215 +169,64 @@ public:
     void solveSudoku()
     {
         if (solve())
-            cout << "2 x 2 Sudoku solved successfully!\n";
+        {
+            cout << "\nSudoku solved successfully!\n";
+        }
         else
-            cout << "No solution exists.\n";
+        {
+            cout << "\nNo solution exists.\n";
+        }
     }
 };
 
 
-// ======================================================
-//                    3 x 3 SUDOKU
-// ======================================================
 
-class Sudoku3x3
-{
-private:
+//MAIN
 
-    int board[3][3];
-
-
-    // CHECK WHETHER NUMBER IS SAFE
-    bool isSafe(int row, int col, int num)
-    {
-        // Check row
-        for (int i = 0; i < 3; i++)
-        {
-            if (board[row][i] == num)
-                return false;
-        }
-
-
-        // Check column
-        for (int i = 0; i < 3; i++)
-        {
-            if (board[i][col] == num)
-                return false;
-        }
-
-
-        return true;
-    }
-
-
-    // RECURSIVE BACKTRACKING
-    bool solve()
-    {
-        int row = -1;
-        int col = -1;
-        bool emptyFound = false;
-
-
-        // Find empty cell
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                if (board[i][j] == 0)
-                {
-                    row = i;
-                    col = j;
-                    emptyFound = true;
-                    break;
-                }
-            }
-
-            if (emptyFound)
-                break;
-        }
-
-
-        // No empty cell means Sudoku is solved
-        if (!emptyFound)
-            return true;
-
-
-        // Try numbers 1 to 3
-        for (int num = 1; num <= 3; num++)
-        {
-            if (isSafe(row, col, num))
-            {
-                board[row][col] = num;
-
-
-                // Recursive call
-                if (solve())
-                    return true;
-
-
-                // Backtracking
-                board[row][col] = 0;
-            }
-        }
-
-        return false;
-    }
-
-
-public:
-
-    // CONSTRUCTOR
-    Sudoku3x3()
-    {
-        int puzzle[3][3] =
-        {
-            {1, 0, 3},
-            {0, 3, 1},
-            {3, 1, 0}
-        };
-
-
-        // Copy puzzle into board
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                board[i][j] = puzzle[i][j];
-            }
-        }
-    }
-
-
-    // DISPLAY
-    void display()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                cout << board[i][j] << " ";
-            }
-
-            cout << endl;
-        }
-    }
-
-
-    // SOLVE SUDOKU
-    void solveSudoku()
-    {
-        if (solve())
-            cout << "3 x 3 Sudoku solved successfully!\n";
-        else
-            cout << "No solution exists.\n";
-    }
-};
-
-
-// ======================================================
-//                       MAIN
-// ======================================================
 
 int main()
 {
-    int choice;
+    int N;
 
 
-    cout << "=====================================\n";
-    cout << "          SUDOKU SOLVER\n";
-    cout << "=====================================\n";
-
-    cout << "1. Solve 2 x 2 Sudoku\n";
-    cout << "2. Solve 3 x 3 Sudoku\n";
-
-    cout << "Enter your choice: ";
-    cin >> choice;
+   
+    cout << "SUDOKU SOLVER\n";
+    
 
 
-    // 2 x 2 Sudoku
-    if (choice == 1)
+    // TAKE N FROM USER
+    cout << "Enter value of N: ";
+    cin >> N;
+
+
+    // Check valid N
+    if (N <= 0)
     {
-        Sudoku2x2 sudoku;
-
-
-        cout << "\nOriginal 2 x 2 Sudoku:\n";
-        sudoku.display();
-
-
-        cout << endl;
-
-        sudoku.solveSudoku();
-
-
-        cout << "\nSolved 2 x 2 Sudoku:\n";
-        sudoku.display();
+        cout << "Invalid value of N!\n";
+        return 0;
     }
 
 
-    // 3 x 3 Sudoku
-    else if (choice == 2)
-    {
-        Sudoku3x3 sudoku;
+    // Create Sudoku
+    SudokuNxN sudoku(N);
 
 
-        cout << "\nOriginal 3 x 3 Sudoku:\n";
-        sudoku.display();
+    // Sudoko Timer from user from user
+    sudoku.inputPuzzle();
 
 
-        cout << endl;
-
-        sudoku.solveSudoku();
-
-
-        cout << "\nSolved 3 x 3 Sudoku:\n";
-        sudoku.display();
-    }
+    // Display original 
+    cout << "\nOriginal Sudoku:\n";
+    sudoku.display();
 
 
-    else
-    {
-        cout << "Invalid choice!\n";
-    }
+    // Solve
+    sudoku.solveSudoku();
+
+
+    // Display solved puzzle
+    cout << "\nSolved Sudoku:\n";
+    sudoku.display();
 
 
     return 0;
