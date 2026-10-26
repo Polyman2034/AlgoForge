@@ -1,18 +1,16 @@
+
 #include <iostream>
 using namespace std;
 
 #define MAX 5
 
-class InputRestrictedDeque {
-private:
-    int deque[MAX];
+class Deque {
+    int arr[MAX];
     int front, rear;
 
 public:
-
-    InputRestrictedDeque() {
-        front = -1;
-        rear = -1;
+    Deque() {
+        front = rear = -1;
     }
 
     bool isEmpty() {
@@ -24,75 +22,78 @@ public:
                (front == rear + 1);
     }
 
-    // Insertion allowed only at rear
-    void insertRear(int value) {
-
+    void insertFront(int value) {
         if (isFull()) {
             cout << "Deque is Full\n";
             return;
         }
 
-        if (isEmpty()) {
+        if (isEmpty())
             front = rear = 0;
+        else
+            front = (front - 1 + MAX) % MAX;
+
+        arr[front] = value;
+
+        cout << "Customer added at front\n";
+    }
+
+    void insertRear(int value) {
+        if (isFull()) {
+            cout << "Deque is Full\n";
+            return;
         }
-        else {
+
+        if (isEmpty())
+            front = rear = 0;
+        else
             rear = (rear + 1) % MAX;
-        }
 
-        deque[rear] = value;
+        arr[rear] = value;
 
-        cout << value << " inserted at rear.\n";
+        cout << "Customer added at rear\n";
     }
 
-    // Deletion from front
     void deleteFront() {
-
         if (isEmpty()) {
             cout << "Deque is Empty\n";
             return;
         }
 
-        cout << deque[front] << " deleted from front.\n";
+        cout << "Customer removed: " << arr[front] << endl;
 
-        if (front == rear) {
+        if (front == rear)
             front = rear = -1;
-        }
-        else {
+        else
             front = (front + 1) % MAX;
-        }
     }
 
-    // Deletion from rear
     void deleteRear() {
-
         if (isEmpty()) {
             cout << "Deque is Empty\n";
             return;
         }
 
-        cout << deque[rear] << " deleted from rear.\n";
+        cout << "Customer removed: " << arr[rear] << endl;
 
-        if (front == rear) {
+        if (front == rear)
             front = rear = -1;
-        }
-        else {
+        else
             rear = (rear - 1 + MAX) % MAX;
-        }
     }
 
     void display() {
-
         if (isEmpty()) {
             cout << "Deque is Empty\n";
             return;
         }
 
-        cout << "Deque: ";
+        cout << "Customers: ";
 
         int i = front;
 
         while (true) {
-            cout << deque[i] << " ";
+            cout << arr[i] << " ";
 
             if (i == rear)
                 break;
@@ -105,20 +106,70 @@ public:
 };
 
 int main() {
+    Deque dq;
+    int type, choice, value;
 
-    InputRestrictedDeque dq;
+    cout << "\nSHOPPING MALL DEQUE";
+    cout << "\n1. Input Restricted Deque";
+    cout << "\n2. Output Restricted Deque";
+    cout << "\nEnter Deque Type: ";
+    cin >> type;
 
-    dq.insertRear(10);
-    dq.insertRear(20);
-    dq.insertRear(30);
+    do {
+        cout << "\n1. Insert at Front";
+        cout << "\n2. Insert at Rear";
+        cout << "\n3. Delete from Front";
+        cout << "\n4. Delete from Rear";
+        cout << "\n5. Display";
+        cout << "\n6. Exit";
+        cout << "\nEnter Choice: ";
+        cin >> choice;
 
-    dq.display();
+        switch (choice) {
 
-    dq.deleteFront();
-    dq.display();
+            case 1:
+                if (type == 1) {
+                    cout << "Insertion allowed only at rear\n";
+                }
+                else {
+                    cout << "Enter Customer ID: ";
+                    cin >> value;
+                    dq.insertFront(value);
+                }
+                break;
 
-    dq.deleteRear();
-    dq.display();
+            case 2:
+                cout << "Enter Customer ID: ";
+                cin >> value;
+                dq.insertRear(value);
+                break;
+
+            case 3:
+                dq.deleteFront();
+                break;
+
+            case 4:
+                if (type == 1) {
+                    dq.deleteRear();
+                }
+                else {
+                    cout << "Deletion allowed only from front\n";
+                }
+                break;
+
+            case 5:
+                dq.display();
+                break;
+
+            case 6:
+                cout << "Thank You\n";
+                break;
+
+            default:
+                cout << "Invalid Choice\n";
+        }
+
+    } while (choice != 6);
 
     return 0;
 }
